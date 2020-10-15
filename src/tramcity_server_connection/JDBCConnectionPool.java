@@ -20,14 +20,14 @@ public class JDBCConnectionPool {
         System.out.println("Start gt connection pool!");
     	while (ConnectionsReadyToUse.isEmpty()) {
 			// create new connection pool
-        	System.out.println("Connection: ReadyToUse:"+ ConnectionsReadyToUse.size() + " - InUse:" + countConnectionsUsing);
-			if(countConnectionsUsing < MAX_CONNEXION ) {
+        	if(countConnectionsUsing < MAX_CONNEXION ) {
 				addConnection();
 	        	System.out.println("Connection: ReadyToUse:"+ ConnectionsReadyToUse.size() + " - InUse:" + countConnectionsUsing);
 			}
 			else {
 				// max 
 				System.out.println("Nombre excessif de connexions. Veuillez patientez.");
+				//break;
 			}
 			
 		}
@@ -46,11 +46,11 @@ public class JDBCConnectionPool {
     	try{
     		Connection conn = DriverManager.getConnection(CONNECT_LINK, "root", "");
 	    	if (conn != null) {
-	            System.out.println("Add new connection pool!");
+	            System.out.println("Add new connection pool success!");
 	            ConnectionsReadyToUse.add(conn);
 	            return conn;
 	        } else {
-	            System.out.println("Failed to make connection pool!");
+	            System.out.println("Failed to create new connection pool!");
 	            return null;
 	        }
 	

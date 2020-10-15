@@ -18,7 +18,7 @@ public class DataSource {
 		return rs;
 	}
 
-	public void executeUpdate(String sql) throws SQLException {
+	public static void executeUpdate(String sql) throws SQLException {
 		
 		// TODO Auto-generated method stub
 		Connection conn = getConnection();
