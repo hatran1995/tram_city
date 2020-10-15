@@ -6,7 +6,8 @@ public class JDBCConnectionPool {
 	
 	public static int countConnectionsUsing = 0;
 	public ArrayList<Connection> ConnectionsReadyToUse = new ArrayList<Connection>();
-
+	private static String CONNECT_LINK = "jdbc:mysql://127.0.0.1:3306/puzzle_db?serverTimezone=UTC";
+//	private static String CONNECT_LINK = "jdbc:mysql://172.31.249.177:3306/puzzle_01?serverTimezone=UTC";
 	private static int MAX_CONNEXION=50;
 	
     Connection conn = null;
@@ -22,6 +23,7 @@ public class JDBCConnectionPool {
         	System.out.println("Connection: ReadyToUse:"+ ConnectionsReadyToUse.size() + " - InUse:" + countConnectionsUsing);
 			if(countConnectionsUsing < MAX_CONNEXION ) {
 				addConnection();
+	        	System.out.println("Connection: ReadyToUse:"+ ConnectionsReadyToUse.size() + " - InUse:" + countConnectionsUsing);
 			}
 			else {
 				// max 
@@ -42,8 +44,7 @@ public class JDBCConnectionPool {
 	}      
     public Connection addConnection() {
     	try{
-    		Connection conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/puzzle_db?serverTimezone=UTC", "root", "");
-    		//Connection conn = DriverManager.getConnection("jdbc:mysql://172.31.249.177:3306/puzzle_01?serverTimezone=UTC", "root", "toto");
+    		Connection conn = DriverManager.getConnection(CONNECT_LINK, "root", "");
 	    	if (conn != null) {
 	            System.out.println("Add new connection pool!");
 	            ConnectionsReadyToUse.add(conn);
