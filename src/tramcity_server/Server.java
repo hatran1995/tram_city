@@ -4,6 +4,9 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.SQLException;
+
+import tramcity_server_connection.DataSource;
 
 @SuppressWarnings("unused")
 public class Server extends Thread {
@@ -41,8 +44,9 @@ public class Server extends Thread {
 			}
 		}
 	}
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 		System.out.println("Hello from server"); 
+		DataSource dst = new DataSource();
 		new Server(1995);
 		
 	}
