@@ -9,13 +9,11 @@ import java.io.PrintWriter;
 // A Java program for a Client 
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.Scanner;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import tramcity_client.Client;
-import tramcity_client_common.ApiEnum;
 import tramcity_client_common.SendPackage;
 
 public class Client extends Thread {
@@ -30,7 +28,7 @@ public class Client extends Thread {
 	private BufferedReader inmsg;
 	public SendPackage sendP = null;
 	public JSONObject responseData = new JSONObject();
-	private String UserName = "Admin";
+	private String UserName = "Client Name";
 
 	// constructor to put ip address and port
 	public Client(String address, int port) {
@@ -45,14 +43,26 @@ public class Client extends Thread {
 		}
 
 	}
+	public Client(String address, int port, String name) {
+		try {
+			UserName = name;
+			socket = new Socket(address, port);
+			outmsg = new PrintWriter(socket.getOutputStream(), true);
+			inmsg = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		} catch (UnknownHostException u) {
+			System.out.println(u);
+		} catch (IOException i) {
+			System.out.println(i);
+		}
 
+	}
 	private void showClientId() {
 		try {
-			System.out.println("Please enter id of the client ");
-			BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+//			System.out.println("Please enter id of the client ");
+//			BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 //			Scanner scanner = new Scanner(System.in);
 //			String line = scanner.nextLine();
-			out.writeUTF("UserName");
+			out.writeUTF(UserName);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -123,8 +133,10 @@ public class Client extends Thread {
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+					break;
 				}
 
+				// safina chof lmok
 				try {
 					// System.out.println("Waiting for the result");
 					DataInputStream oos = new DataInputStream(socket.getInputStream());
