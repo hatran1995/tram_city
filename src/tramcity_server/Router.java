@@ -1,49 +1,45 @@
 package tramcity_server;
 
-import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import tramcity_server_common.CityList;
-import tramcity_server_common.TramwayList;
+import tramcity_server_common.Station;
+import tramcity_server_common.City;
+import tramcity_server_common.TramwayBudget;
 import tramcity_server_common.ApiResponse;
 public class Router {
 
-	static CityList cityP = new CityList();
-	static TramwayList tramway = new TramwayList();
-
 	public static String createCity(JSONObject city) {
-		return cityP.create(city).toString();
+		return City.createNewCity(city).toString();
 	}
 
 	public static String updateCity(JSONObject city) throws SQLException {
-		return cityP.update(city).toString();
+		return City.updateCity(city).toString();
 	}
 
 	public static String deleteCity() {
-		return cityP.delete().toString();
+		return City.deleteCity().toString();
 	}
 
 	public static String findAllCity() {
 
 		try {
-			return cityP.getAll().toString();
+			ApiResponse cityTemp = City.getAllCity();
+		//	String resturn = (new ApiResponse(cityTemp!=null?true:false, cityTemp, "Success")).toString();
+			return cityTemp.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
 
-	public static String findOneCityByID(int cityID) {
-
-		try {
-			return cityP.getByID(cityID).toString();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
+	public static String findOneCityByID(int cityID) throws JSONException {
+			City cityTemp = City.getCityByID(cityID);
+			String resturn = (new ApiResponse(cityTemp!=null?true:false, new JSONObject(cityTemp), "Success")).toString();
+			return resturn;		
 	}
 
 	// Tramway
@@ -51,7 +47,7 @@ public class Router {
 	public static String findOneTramwayByCityID(int cityID) {
 
 		try {
-			return tramway.getTramWayByCityID(cityID).toString();
+			return TramwayBudget.getTramWayByCityID(cityID).toString();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -59,14 +55,14 @@ public class Router {
 	}
 
 	public static String createUpdateTramway(JSONObject inp) {
-		return tramway.createAndUpdate(inp).toString();
+		return TramwayBudget.createAndUpdate(inp).toString();
 	}
 
 	public static String randomStation(JSONObject inp) {
 		int cityID;
 		try {
 			cityID = (int) inp.getInt("ID");
-			return tramway.randomStation(cityID).toString();
+			return Station.randomStation(cityID).toString();
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
