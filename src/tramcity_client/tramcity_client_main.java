@@ -13,9 +13,9 @@ import tramcity_client_ui.Dashboard;
 
 public class tramcity_client_main {
 	static Client client;
-	public static void main(String args[]) {
+	public static void main(String args[]) throws InterruptedException {
 
-		client = new Client("127.0.0.1", 1995);
+		client = new Client("172.31.249.169", 1992);
 		client.start();
 		//System.out.println("call view");
 		CityList windowCityList  = new CityList(client);
@@ -24,13 +24,17 @@ public class tramcity_client_main {
 	
 	
 
-	public void getCityData() {
+	public void getCityData() throws InterruptedException {
 		// TODO Auto-generated method stub
 		client.setResponseData(null);
 		SendPackage sendP = new SendPackage();
 		sendP.setApi(ApiEnum.CITY_FIND_ALL);		
 		client.setSendP(sendP);
 		JSONObject res = null;
+
+		System.out.println("START:");
+		Object obj = new Object();
+		synchronized (obj) {
 		while(res == null) {
 			res = client.getResponseData();
 			System.out.println("waiting:"+res);
@@ -59,6 +63,7 @@ public class tramcity_client_main {
 					e.printStackTrace();
 				}
 			}
+		}obj.wait(50);
 		} 
 		//
 		
