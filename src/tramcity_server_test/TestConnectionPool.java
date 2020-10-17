@@ -1,7 +1,13 @@
-
 package tramcity_server_test;
 
 import tramcity_server_common.City;
+import tramcity_server_connection.DataSource;
+
+import java.sql.SQLException;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import tramcity_server_common.ApiResponse;
 
 public class TestConnectionPool extends  Thread  {	
@@ -15,26 +21,31 @@ public class TestConnectionPool extends  Thread  {
 	public void run() {
 	    System.out.println("Running " +  threadName );
 	    try {
-	       for(int i = 4; i > 0; i--) {
+	       for(int i = 1; i <= 4; i++) {
 	          System.out.println("Thread: " + threadName + "-" + i + " start get list all city");
-	  
-			City resItem = City.getCityByID(13);
-			//compare resItem.body.success with testItem.output 
-			if( resItem != null) {
-				if(resItem.getID() > 0) {
-					System.out.println("Thread: " + threadName + "-" + i +" test Success: Name City - "+ resItem.getName());
-					
-				}else {
-					//test fail
-					System.err.println("Thread: " + threadName + "-" + i +" test false");
+	          ApiResponse resItem =  City.getAllCity();
+
+				//compare resItem.body.success with testItem.output 
+				if( resItem.getBody().getBoolean("success") == true) {
+					JSONArray resList = resItem.getBody().getJSONArray("data");
+					//test ok
+					if(resList.length() > 0) {
+							System.out.println("Thread: " + threadName + "-" + i +" JsonListCity: " + resList.toString() + "");
+					}else {
+						//test fail
+						System.err.println("Test false");
+
+					}
 				}
-			}
 	          // Let the thread sleep for a while.
 	          Thread.sleep(50);
 	       }
 	   } catch (InterruptedException e) {
 	       System.out.println("Thread " +  threadName + " interrupted.");
-	   }
+	   } catch (JSONException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 	   System.out.println("Thread " +  threadName + " exiting.");
 	 }
 	public void start ()
@@ -47,12 +58,12 @@ public class TestConnectionPool extends  Thread  {
 	      }
 	   }
 	
-	public static void main(String[] args) {
-		
-		TestConnectionPool T1 = new TestConnectionPool( "Thread-1");
-	      T1.start();
-			TestConnectionPool T2 = new TestConnectionPool( "Thread-2");
-		      T2.start();
+	public static void main(String[] args) throws ClassNotFoundException, SQLException {
+		DataSource dst = new DataSource();
+		TestConnectionPool T1 = new TestConnectionPool( "Thread-a");
+	    T1.start();
+	    TestConnectionPool T2 = new TestConnectionPool( "Thread-b");
+		T2.start();
 	      
 	}
 }
