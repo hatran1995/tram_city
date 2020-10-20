@@ -37,10 +37,10 @@ public class Router {
 	}
 
 	public static String findOneCityByID(int cityID) throws JSONException {
-			City cityTemp = City.getCityByID(cityID);
-			String resturn = (new ApiResponse(cityTemp!=null?true:false, new JSONObject(cityTemp), "Success")).toString();
-			return resturn;		
-	}
+		JSONObject cityTemp =  City.getCityByID(cityID);
+		String resturn = (new ApiResponse(cityTemp!=null?true:false, cityTemp, "Success")).toString();
+		return resturn;		
+}
 
 	// Tramway
 

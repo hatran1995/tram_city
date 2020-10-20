@@ -14,8 +14,6 @@ public class Server extends Thread {
 	// initialize socket and input stream
 	private Socket socket = null;
 	private ServerSocket server = null;
-
-
 	// constructor with port
 	public Server(int port) {
 
@@ -24,9 +22,7 @@ public class Server extends Thread {
 			server = new ServerSocket(port);
 			server.setReuseAddress(true);
 			System.out.println("Server started on port " + port);
-
-			System.out.println("Waiting for a client ...");
-			
+			System.out.println("Waiting for a client ...");			
 			while (true) {
 				socket = server.accept();				
 				ClientHandler clientSock = new ClientHandler(socket);

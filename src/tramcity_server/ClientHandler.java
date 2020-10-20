@@ -5,6 +5,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketException;
 import java.sql.SQLException;
 
 import org.json.*;
@@ -41,8 +42,9 @@ public class ClientHandler implements Runnable {
 						JSONObject input;
 						System.out.println(line);
 						input = new JSONObject(line);		
-						System.out.println("line:"+line);
-						if( input.get("api").toString() == "CLOSE_CONNECTION") {							
+						System.out.println("json send from client:"+line);
+						String api = input.getString("api").toUpperCase(); 
+						if( api == "CLOSE_CONNECTION".toUpperCase()) {							
 							line = "0";
 							System.out.println("Client close connection");
 						}else {
@@ -57,6 +59,10 @@ public class ClientHandler implements Runnable {
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+				}catch (SocketException e) {
+					// TODO Auto-generated catch block
+					System.out.println("Client reset socket connection");
+					//e.printStackTrace();
 				}
 				DataOutputStream oos = new DataOutputStream(socket.getOutputStream());
 				// write object to Socket
