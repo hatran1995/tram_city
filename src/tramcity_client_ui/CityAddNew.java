@@ -98,7 +98,12 @@ public class CityAddNew {
 		JButton btnCreate = new JButton("Create");
 		btnCreate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				createCity();
+				try {
+					createCity();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 		btnCreate.setBounds(212, 185, 89, 23);
@@ -108,7 +113,13 @@ public class CityAddNew {
 		btnCancel.setVisible(true);
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				CityList cityList = new CityList(client);
+				CityList cityList = null;
+				try {
+					cityList = new CityList(client);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				cityList.frame.setVisible(true);
 				frame.dispose();
 			}
@@ -140,7 +151,7 @@ public class CityAddNew {
 		}
 	}	
 
-	private void createCity() {
+	private void createCity() throws InterruptedException {
 		if(isValid()) {			
 			try {			
 				client.setResponseData(null);		
@@ -157,6 +168,8 @@ public class CityAddNew {
 				client.setSendP(sendPa);
 
 				JSONObject res = null;
+				Object obj = new Object();
+				synchronized (obj) {
 				while(res == null) {
 					res = client.getResponseData();
 					System.out.println("wait for return:"+res);
@@ -165,10 +178,9 @@ public class CityAddNew {
 						boolean sMess = res.getBoolean("success");
 						if(sMess) {
 							lbtMess.setText("Add Success");
-							//move to dashboard
-							
-							Dashboard ctDetail =	new Dashboard(client, (res.getJSONArray("data").getJSONObject(0)).getInt("ID"));
-							Dashboard.frame.setVisible(true);
+							//move to listCity
+							CityList listCity = new CityList(client);
+							listCity.frame.setVisible(true);
 							frame.dispose();
 
 						}else {
@@ -176,7 +188,9 @@ public class CityAddNew {
 						}
 						System.out.println("Return:"+res.toString());
 					}
-				} 
+					obj.wait(50);
+				}
+				}  
 
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
@@ -218,13 +232,16 @@ public class CityAddNew {
 		return valid;
 	}
 
-	private void getCityData() {
+	private void getCityData() throws InterruptedException {
 		// TODO Auto-generated method stub		
 		client.setResponseData(null);
 		SendPackage sendP = new SendPackage();
 		sendP.setApi(ApiEnum.CITY_FIND_ALL);		
 		client.setSendP(sendP);
 		JSONObject res = null;
+
+		Object obj = new Object();
+		synchronized (obj) {
 		while(res == null) {
 			res = client.getResponseData();
 			System.out.println("waiting:"+res);
@@ -255,7 +272,9 @@ public class CityAddNew {
 					e.printStackTrace();
 				}
 			}
-		} 
+			obj.wait(50);
+		}
+		}   
 		//
 
 		client.setResponseData(null);

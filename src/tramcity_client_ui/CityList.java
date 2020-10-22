@@ -61,11 +61,11 @@ public class CityList {
 
 	/**
 	 * Create the application.
+	 * @throws InterruptedException 
 	 */
-	public CityList(Client socket) {
+	public CityList(Client socket) throws InterruptedException {
 		client = socket;
 		initialize();
-
 		getCityData();
 	}
 
@@ -151,31 +151,36 @@ public class CityList {
 		
 	}
 	
-	private void getCityData() {
+	private void getCityData() throws InterruptedException {
 		// TODO Auto-generated method stub		
 		client.setResponseData(null);
 		SendPackage sendP = new SendPackage();
 		sendP.setApi(ApiEnum.CITY_FIND_ALL);		
 		client.setSendP(sendP);
 		JSONObject res = null;
-		while(res == null) {
-			res = client.getResponseData();
-			System.out.println("waiting:"+res);
-			if(res!= null) {
-				// if success true - get data bind to table 
-				System.out.println(res.toString());
-				boolean sMess;
-				try {
-					sMess = res.getBoolean("success");				
-					if(sMess) {
-						bindDataToTable(res.getJSONArray("data"));
-					}else {						
+
+		Object obj = new Object();
+		synchronized (obj) {
+			while(res == null) {
+				res = client.getResponseData();
+				System.out.println("waiting:"+res);
+				if(res!= null) {
+					// if success true - get data bind to table 
+					System.out.println(res.toString());
+					boolean sMess;
+					try {
+						sMess = res.getBoolean("success");				
+						if(sMess) {
+							bindDataToTable(res.getJSONArray("data"));
+						}else {						
+						}
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				}
-			}
+				obj.wait(50);
+			} 
 		} 
 		//
 		

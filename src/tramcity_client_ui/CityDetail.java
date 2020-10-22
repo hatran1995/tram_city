@@ -36,8 +36,9 @@ public class CityDetail {
 	 */
 	/**
 	 * Create the application.
+	 * @throws InterruptedException 
 	 */
-	public CityDetail(Client socket, int id) {
+	public CityDetail(Client socket, int id) throws InterruptedException {
 		client = socket;
 		cityID = id;
 		initialize();
@@ -74,7 +75,13 @@ public class CityDetail {
 		btnMenuTramwayStation.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				CityTramway windowCityTramway  = new CityTramway(client, cityID);
+				CityTramway windowCityTramway = null;
+				try {
+					windowCityTramway = new CityTramway(client, cityID);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				windowCityTramway.frame.setVisible(true);
 				frame.dispose();
 			}
@@ -122,7 +129,12 @@ public class CityDetail {
 		JButton btnUpdate = new JButton("Update");
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				updateCityInfo();
+				try {
+					updateCityInfo();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 		btnUpdate.setBounds(119, 182, 89, 23);
@@ -146,7 +158,12 @@ public class CityDetail {
 		JButton btnNewButton = new JButton("Delete");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				deleteCityInfo();
+				try {
+					deleteCityInfo();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 		btnNewButton.setBounds(322, 181, 97, 25);
@@ -160,7 +177,7 @@ public class CityDetail {
 	}
 
 
-	private void getCityInfo() {
+	private void getCityInfo() throws InterruptedException {
 		try {
 			client.setResponseData(null);		
 			JSONObject bodyItem = new JSONObject();
@@ -171,16 +188,20 @@ public class CityDetail {
 			sendPa.setBody(bodyItem);
 			client.setSendP(sendPa);
 
-			JSONObject res = null;
-			while(res == null) {
-				res = client.getResponseData();
-
-				System.out.println("wait res:"+res);
-				if(res!= null) {
-					// if success true - get data bind to table 
-					setDataToField((res.getJSONArray("data")).getJSONObject(0));
-				}
-			} 			
+			Object obj = new Object();
+			synchronized (obj) {
+				JSONObject res = null;
+				while(res == null) {
+					res = client.getResponseData();
+	
+					System.out.println("wait res:"+res);
+					if(res!= null) {
+						// if success true - get data bind to table 
+						setDataToField((res.getJSONObject("data")));
+					}
+					obj.wait(50);
+				} 		
+			} 	
 			//CLOSE
 
 		} catch (JSONException e) {
@@ -191,15 +212,15 @@ public class CityDetail {
 	private void setDataToField(JSONObject res) {
 		// TODO Auto-generated method stub
 		try {
-			txtCityName.setText(res.getString("Name"));
-			txtHeight.setText(String.valueOf( res.getDouble("Height")));
-			txtWidth.setText(String.valueOf( res.getDouble("Width")));
+			txtCityName.setText(res.getString("name"));
+			txtHeight.setText(String.valueOf( res.getDouble("height")));
+			txtWidth.setText(String.valueOf( res.getDouble("width")));
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}	
-	private void deleteCityInfo() {
+	private void deleteCityInfo() throws InterruptedException {
 		try {
 			client.setResponseData(null);		
 			JSONObject bodyItem = new JSONObject();
@@ -210,40 +231,45 @@ public class CityDetail {
 			sendPa.setBody(bodyItem);
 			client.setSendP(sendPa);
 			JSONObject res = null;
-			while(res == null) {
-				res = client.getResponseData();
-				System.out.println("wait res:"+res);
-				if(res!= null) {
 
-
-					// if success 
-					boolean sMess = res.getBoolean("success");
-					if(sMess) {
-						lbtMess.setText("Delete Success");
-						CityList listcity = new CityList(client);
-						listcity.frame.setVisible(true);
-						frame.dispose();						
-
-					}else {
-						lbtMess.setText("Error :"+res.getString("msg") );						
+			Object obj = new Object();
+			synchronized (obj) {
+				while(res == null) {
+					res = client.getResponseData();
+					System.out.println("wait res:"+res);
+					if(res!= null) {
+	
+	
+						// if success 
+						boolean sMess = res.getBoolean("success");
+						if(sMess) {
+							lbtMess.setText("Delete Success");
+							CityList listcity = new CityList(client);
+							listcity.frame.setVisible(true);
+							frame.dispose();						
+	
+						}else {
+							lbtMess.setText("Error :"+res.getString("msg") );						
+						}
+						System.out.println("Result:"+res.toString());
 					}
-					System.out.println("Result:"+res.toString());
-				}
-			} 
+					obj.wait(50);
+				} 
+			} 	
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	private void updateCityInfo() {
+	private void updateCityInfo() throws InterruptedException {
 		if(isValid()) {	
 			try {			
 				client.setResponseData(null);		
 				JSONObject bodyItem = new JSONObject();
 				bodyItem.put("ID", "" +cityID);
 				bodyItem.put("name", "" +txtCityName.getText());
-				bodyItem.put("height", Double.parseDouble( txtHeight.getText()));
+				bodyItem.put("height",  txtHeight.getText());
 				bodyItem.put("width", txtWidth.getText());
 
 				SendPackage sendPa = new SendPackage();
@@ -252,20 +278,24 @@ public class CityDetail {
 				client.setSendP(sendPa);
 
 				JSONObject res = null;
-				while(res == null) {
-					res = client.getResponseData();
-					System.out.println("wait res:"+res);
-					if(res!= null) {
-						// if success 
-						boolean sMess = res.getBoolean("success");
-						if(sMess) {
-							lbtMess.setText("Update Success");
-						}else {
-							lbtMess.setText("Error :"+res.getString("msg") );						
+				Object obj = new Object();
+				synchronized (obj) {
+					while(res == null) {
+						res = client.getResponseData();
+						System.out.println("wait res:"+res);
+						if(res!= null) {
+							// if success 
+							boolean sMess = res.getBoolean("success");
+							if(sMess) {
+								lbtMess.setText("Update Success");
+							}else {
+								lbtMess.setText("Error :"+res.getString("msg") );						
+							}
+							System.out.println("Return:"+res.toString());
 						}
-						System.out.println("Return:"+res.toString());
-					}
-				} 
+						obj.wait(50);
+					} 
+				} 	
 				getCityInfo();
 
 			} catch (JSONException e) {
