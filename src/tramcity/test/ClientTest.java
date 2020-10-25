@@ -1,4 +1,4 @@
-package tramcity.server.test;
+package tramcity.test;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
