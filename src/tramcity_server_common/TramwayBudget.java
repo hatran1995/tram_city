@@ -161,7 +161,7 @@ public class TramwayBudget {
 	            pstmt.executeUpdate();
 	            DataSource.returnConnection(conn);
 	            // random Station
-	            Station.randomStation(ID);
+	            Station.renderStation(ID);
 	        	// add success
 	        	return new ApiResponse(true, null, "Create success");
 	        	

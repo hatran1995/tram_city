@@ -117,7 +117,7 @@ public class Station {
 	}
 	
 	
-	public static ApiResponse randomStation(int cityID) {
+	public static ApiResponse renderStation(int cityID) {
 		//get width height
 		try {
 			String sql = "select * from tblcity JOIN tblbudgetstation on tblcity.cId = tblbudgetstation.bIdCity where tblcity.cId = " + cityID;
@@ -133,7 +133,7 @@ public class Station {
             	int ValueStation = rs.getInt("bValueStation") ;
             	int maxPoint = ((int) Budget/ValueStation);
             	int r = rs.getInt("bRadius") ;
-            	//random
+            	//render
             	RandomPoint newRandom = new RandomPoint(Width, Height, maxPoint, r, 0, 2*Math.PI);
             	JSONObject resRanDomPoint =	newRandom.getListPoint(); 
             //	Point[] points = newRandom.getListPoint(); 
@@ -153,7 +153,7 @@ public class Station {
             	JSONArray resListPath  = resRanDomPoint.getJSONArray("ListPath");
             	Line.createAndUpdatePath(resListPath,cityID);
                 //return list Station
-            	return new ApiResponse(true, TramwayBudget.getTramWayByCityID(cityID), "Random success");
+            	return new ApiResponse(true, TramwayBudget.getTramWayByCityID(cityID), "Render station success");
 			}     	
 		} catch (Exception e) {
 		// TODO: handle exception

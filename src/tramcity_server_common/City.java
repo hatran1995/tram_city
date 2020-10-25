@@ -69,27 +69,31 @@ public class City {
 	}
 	
 	//get byID 
-	public static City getCityByID(int id) {
+	public static ApiResponse getCityByID(int id) throws JSONException {
 		try {
 
 			String sql = "select * from tblcity where cId = " + id;
 			ResultSet rs = DataSource.executeQuery(sql);
     	
 			if(rs.next() == false) {
-				return new City();
-			//	return new ApiResponse(true, city, "Not Found");
+			//	return null;
+				return new ApiResponse(false, null, "Not Found");
 			}else {
-				int cID = rs.getInt("cId");
-				String cName = rs.getString("cName");
-				double height = rs.getFloat("cHeight");
-				double width =  rs.getFloat("cWidth");
-				City city = new City(cID,cName,height,width);
-				return city;
+				JSONObject resItem = new JSONObject();                	
+
+                resItem.put("ID", rs.getInt("cId"));
+
+                resItem.put("name",  rs.getString("cName") );
+                resItem.put("height", rs.getFloat("cHeight") );
+                resItem.put("width", rs.getFloat("cWidth") );  
+
+				return new ApiResponse(true, resItem, "Not Found");
+               // return resItem;
 			}     	
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
-			return null;//new ApiResponse(false, null, e.getMessage());
+			return new ApiResponse(false, null, e.getMessage());
 
 		}
 	}
@@ -236,6 +240,15 @@ public class City {
 				isValid = false;
 			}
 		try {
+			//check max min width height
+			if(cWidth <10 || cWidth >50) {				
+				txtResText = "Width range from 10 to 50";
+				isValid = false;
+			}
+			if(cHeight <10 || cHeight >50) {				
+				txtResText = "Height range from 10 to 50";
+				isValid = false;
+			}
 
 			resValid.put("isValid", isValid);
 			resValid.put("txtResText", txtResText);

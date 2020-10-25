@@ -3,6 +3,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.RenderingHints;
 import java.awt.geom.Path2D;
 
 import javax.imageio.ImageIO;
@@ -60,9 +61,13 @@ public class CityMap extends JPanel {
 
 
 			Graphics2D g2 = (Graphics2D) g;
-			final BufferedImage imgBg = ImageIO.read( this.getClass().getResourceAsStream("/img/map.jpg"));
-			g2.drawImage(imgBg.getScaledInstance(600, 400,java.awt.Image.SCALE_SMOOTH), 0, 0, null);//(400, 300, 5, 5);
-
+//			final BufferedImage imgBg = ImageIO.read( this.getClass().getResourceAsStream("/img/map.jpg"));
+//			g2.drawImage(imgBg.getScaledInstance(600, 400,java.awt.Image.SCALE_SMOOTH), 0, 0, null);//(400, 300, 5, 5);
+	//		g2.drawOval(5, 5, (int) (600*os) ,(int) ( 400*os));
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.setColor(new Color(60, 179, 113));
+			g2.fillOval(0, 0, this.getWidth()-1,this.getHeight()-1);
+			
 			if (points != null){       
 				for (int i = 0; i < points.length; i++) {
 					try {
