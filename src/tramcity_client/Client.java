@@ -14,6 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import tramcity_client.Client;
+import tramcity_client_common.ApiEnum;
 import tramcity_client_common.SendPackage;
 
 public class Client extends Thread {
@@ -121,40 +122,41 @@ public class Client extends Thread {
 
 		showClientId();
 		// sendP.setApi(ApiEnum.CITY_FIND_ALL);
-		Boolean isSend = false;
-		while (!isSend) {
+		Boolean isEnd = false;
+		while (!isEnd) {
 			// if have new request from ui
 			// System.out.println("SendPackage:"+ sendP);
 			if (sendP != null) {
-				System.out.println("SendPackage:" + sendP.toString());
-				try {
-					// get all city
-					out.writeUTF(sendP.toString());
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					break;
-				}
-
-				// safina chof lmok
-				try {
-					// System.out.println("Waiting for the result");
-					DataInputStream oos = new DataInputStream(socket.getInputStream());
-					String msg = oos.readUTF();
+				if(sendP.getApi() == ApiEnum.CLOSE_CONNECTION) {
+					isEnd = true;
+					closeConnection();
+				}else {
+					System.out.println("SendPackage:" + sendP.toString());
 					try {
-						JSONObject resd = new JSONObject(msg);
-						responseData = resd;
-						// System.out.println(resd);
-					} catch (JSONException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						out.writeUTF(sendP.toString());
+					} catch (IOException e) {
+						isEnd = true;
+						System.out.println("Server close connection!");						
+						//e.printStackTrace();
+						break;
+					}		
+					// safina chof lmok
+					try {
+						// System.out.println("Waiting for the result");
+						DataInputStream oos = new DataInputStream(socket.getInputStream());
+						String msg = oos.readUTF();
+						try {
+							JSONObject resd = new JSONObject(msg);
+							responseData = resd;
+							// System.out.println(resd);
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}	
+						sendP = null;
+					} catch (IOException i) {
+						System.out.println(i);
 					}
-
-					sendP = null;
-					// isSend = true;
-
-				} catch (IOException i) {
-					System.out.println(i);
 				}
 			} else {
 				try {
