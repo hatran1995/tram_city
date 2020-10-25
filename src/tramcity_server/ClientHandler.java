@@ -35,8 +35,8 @@ public class ClientHandler implements Runnable {
 					+ in.readUTF());
 			
 			while (!line.equals("0")) {
-				String response = "";
 				try {
+					String response = "";
 					line = in.readUTF();	
 					if(!line.equals("0")) {
 						JSONObject input;
@@ -53,6 +53,9 @@ public class ClientHandler implements Runnable {
 							System.out.println(response.toString());
 						}
 					}
+					DataOutputStream oos = new DataOutputStream(socket.getOutputStream());
+					// write object to Socket
+					oos.writeUTF(response);
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -63,13 +66,8 @@ public class ClientHandler implements Runnable {
 					// TODO Auto-generated catch block
 					System.out.println("Client reset socket connection");
 					//e.printStackTrace();
+					break;
 				}
-				DataOutputStream oos = new DataOutputStream(socket.getOutputStream());
-				// write object to Socket
-
-				oos.writeUTF(response);
-				
-
 			}
 			System.out.println("Closing connection");
 
