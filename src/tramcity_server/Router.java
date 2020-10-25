@@ -37,10 +37,11 @@ public class Router {
 	}
 
 	public static String findOneCityByID(int cityID) throws JSONException {
-		JSONObject cityTemp =  City.getCityByID(cityID);
-		String resturn = (new ApiResponse(cityTemp!=null?true:false, cityTemp, "Success")).toString();
-		return resturn;		
-}
+//			JSONObject cityTemp =  City.getCityByID(cityID);
+//			String resturn = (new ApiResponse(cityTemp!=null?true:false, cityTemp, cityTemp!=null?"Success":"Not Found")).toString();
+//			return resturn;	
+			return City.getCityByID(cityID).toString();
+	}
 
 	// Tramway
 
@@ -58,11 +59,11 @@ public class Router {
 		return TramwayBudget.createAndUpdate(inp).toString();
 	}
 
-	public static String randomStation(JSONObject inp) {
+	public static String renderStation(JSONObject inp) {
 		int cityID;
 		try {
 			cityID = (int) inp.getInt("ID");
-			return Station.randomStation(cityID).toString();
+			return Station.renderStation(cityID).toString();
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -113,8 +114,8 @@ public class Router {
 			case "TRAMWAY_UPDATE":
 				return createUpdateTramway((JSONObject) input.get("body"));
 			// random
-			case "TRAMWAY_MAP_RANDOM":
-				return randomStation((JSONObject) input.get("body"));
+			case "TRAMWAY_MAP_RENDER":
+				return renderStation((JSONObject) input.get("body"));
 
 			default:
 				return new ApiResponse(false, null, "Not found API").toString();
