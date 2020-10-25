@@ -1,4 +1,4 @@
-package tramcity_client_common;
+package tramcity.client.common;
 import org.json.JSONException;
 import org.json.JSONObject;
 

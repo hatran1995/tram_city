@@ -1,4 +1,4 @@
-package tramcity_server_common;
+package tramcity.server.common;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,7 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import tramcity_server_connection.DataSource;
+import tramcity.server.connection.DataSource;
 
 public class TramwayBudget {
 	int ID;

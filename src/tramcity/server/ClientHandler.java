@@ -1,4 +1,4 @@
-package tramcity_server;
+package tramcity.server;
 
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;

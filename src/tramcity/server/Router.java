@@ -1,4 +1,4 @@
-package tramcity_server;
+package tramcity.server;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import tramcity_server_common.Station;
-import tramcity_server_common.City;
-import tramcity_server_common.TramwayBudget;
-import tramcity_server_common.ApiResponse;
+import tramcity.server.common.Station;
+import tramcity.server.common.City;
+import tramcity.server.common.TramwayBudget;
+import tramcity.server.common.ApiResponse;
 public class Router {
 
 	public static String createCity(JSONObject city) {

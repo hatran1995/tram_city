@@ -1,4 +1,4 @@
-package tramcity_client_ui;
+package tramcity.client.ui;
 
 import java.awt.Color;
 import java.awt.EventQueue;
@@ -17,9 +17,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import tramcity_client.Client;
-import tramcity_client_common.ApiEnum;
-import tramcity_client_common.SendPackage;
+import tramcity.client.Client;
+import tramcity.client.common.ApiEnum;
+import tramcity.client.common.SendPackage;
 
 public class CityAddNew {
 

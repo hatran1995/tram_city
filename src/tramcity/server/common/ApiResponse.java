@@ -1,4 +1,4 @@
-package tramcity_server_common;
+package tramcity.server.common;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package tramcity_server_connection;
+package tramcity.server.connection;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;

@@ -1,4 +1,4 @@
-package tramcity_client_common;
+package tramcity.client.common;
 
 // The Enum in Java is a data type which contains a fixed set of constants
 

@@ -1,4 +1,4 @@
-package tramcity_client_ui;
+package tramcity.client.ui;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;

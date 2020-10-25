@@ -1,14 +1,14 @@
-package tramcity_server_test;
+package tramcity.server.test;
 
-import tramcity_server_common.City;
-import tramcity_server_connection.DataSource;
+import tramcity.server.common.City;
+import tramcity.server.connection.DataSource;
 
 import java.sql.SQLException;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import tramcity_server_common.ApiResponse;
+import tramcity.server.common.ApiResponse;
 
 public class TestConnectionPool extends  Thread  {	
 	private Thread t;

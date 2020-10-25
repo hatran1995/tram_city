@@ -1,4 +1,4 @@
-package tramcity_server_test;
+package tramcity.server.test;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -16,8 +16,8 @@ import org.json.JSONObject;
 
 import com.sun.javafx.scene.paint.GradientUtils.Parser;
 
-import tramcity_client_common.ApiEnum;
-import tramcity_client_common.SendPackage;
+import tramcity.client.common.ApiEnum;
+import tramcity.client.common.SendPackage;
 
 public class ClientTest extends Thread {
 	// Thread for socket
@@ -63,7 +63,7 @@ public class ClientTest extends Thread {
 	
 	private void showClientId() {
 		try {
-			System.out.println("Please enter name of the client ");
+			System.out.println("Please enter id of the client ");
 			//BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			Scanner scanner = new Scanner(System.in);
 			String line = scanner.nextLine();
@@ -240,7 +240,8 @@ public class ClientTest extends Thread {
 	
 	public static void main(String args[]) throws InterruptedException {
 
-		ClientTest client = new ClientTest("127.0.0.1", 1992);
+	//	ClientTest client = new ClientTest("127.0.0.1", 1995);
+		ClientTest client = new ClientTest("172.31.249.169", 1995);
 		client.start();
 	}
 }

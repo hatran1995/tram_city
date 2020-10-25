@@ -1,21 +1,22 @@
-package tramcity_client;
+package tramcity.client;
 
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import tramcity_client_common.ApiEnum;
-import tramcity_client_common.SendPackage;
-import tramcity_client_ui.CityAddNew;
-import tramcity_client_ui.CityList;
-import tramcity_client_ui.Dashboard;
+import tramcity.client.common.ApiEnum;
+import tramcity.client.common.SendPackage;
+import tramcity.client.ui.CityAddNew;
+import tramcity.client.ui.CityList;
+import tramcity.client.ui.Dashboard;
 
-public class tramcity_client_main {
+public class TramcityClientMain {
 	static Client client;
 	public static void main(String args[]) throws InterruptedException {
 
-		client = new Client("172.31.249.169", 1992);
+		client = new Client("172.31.249.169", 1995);
+//		client = new Client("127.0.0.1", 1995);
 		client.start();
 		//System.out.println("call view");
 		CityList windowCityList  = new CityList(client);

@@ -1,4 +1,4 @@
-package tramcity_server;
+package tramcity.server;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -6,7 +6,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.SQLException;
 
-import tramcity_server_connection.DataSource;
+import tramcity.server.connection.DataSource;
 
 @SuppressWarnings("unused")
 public class Server extends Thread {

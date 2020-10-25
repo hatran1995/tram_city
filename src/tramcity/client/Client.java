@@ -1,4 +1,4 @@
-package tramcity_client;
+package tramcity.client;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -13,9 +13,9 @@ import java.net.UnknownHostException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import tramcity_client.Client;
-import tramcity_client_common.ApiEnum;
-import tramcity_client_common.SendPackage;
+import tramcity.client.Client;
+import tramcity.client.common.ApiEnum;
+import tramcity.client.common.SendPackage;
 
 public class Client extends Thread {
 	// Thread for socket
