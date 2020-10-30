@@ -17,6 +17,7 @@ public class Line {
 	int FromY;
 	int ToX;
 	int ToY;
+	int Line;
 	
 
 	public Line() {
@@ -26,15 +27,17 @@ public class Line {
 		this.FromY = 0;
 		this.ToX = 0;
 		this.ToY = 0;
+		this.Line = 0;
 	}
 
-	public Line(int iD, String name,int fromX, int fromY, int toX, int toY) {		
+	public Line(int iD, String name,int fromX, int fromY, int toX, int toY, int line) {		
 		this.ID = iD;
 		this.Name = name;
 		this.FromX = fromX;
 		this.FromY = fromY;
 		this.ToX = toX;
 		this.ToY = toY;
+		this.Line = line;
 	}
 	public static JSONArray getPathByCityID(int id) {
 		try {
@@ -54,7 +57,8 @@ public class Line {
                     resItem.put("FromX", rs.getInt("lFromX") );
                     resItem.put("FromY", rs.getInt("lFromY") );
                     resItem.put("ToX", rs.getInt("lToX") );
-                    resItem.put("ToY", rs.getInt("lToY") );        
+                    resItem.put("ToY", rs.getInt("lToY") );     
+                    resItem.put("Line", rs.getInt("line") );        
                     stationAll.put(resItem);                    
                 }	while(rs.next());
         		return stationAll;
@@ -86,11 +90,12 @@ public class Line {
                 int fromY = pathAdd.getInt("fromY");
                 int toX = pathAdd.getInt("toX");
                 int toY = pathAdd.getInt("toY");
+                int line = pathAdd.getInt("line");
                 
                 if(i>0) {
             		query = query + " , ";
                 }
-        		String queryItem = " (null,"+ID+" ,'path' ,  "+fromX+" ,"+fromY+" ,"+toX+" ,"+toY+"   ) ";
+        		String queryItem = " (null,"+ID+" ,'path' ,  "+fromX+" ,"+fromY+" ,"+toX+" ,"+toY+" ,"+line+" ) ";
         		query = query + queryItem;
 			}
 			System.out.println(query);

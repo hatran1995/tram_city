@@ -134,7 +134,7 @@ public class Station {
             	int maxPoint = ((int) Budget/ValueStation);
             	int r = rs.getInt("bRadius") ;
             	//render
-            	RandomPoint newRandom = new RandomPoint(Width, Height, maxPoint, r, 0, 2*Math.PI);
+            	DividePoint newRandom = new DividePoint(Width, Height, maxPoint, r, 0, 2*Math.PI);
             	JSONObject resRanDomPoint =	newRandom.getListPoint(); 
             //	Point[] points = newRandom.getListPoint(); 
             	JSONArray resListPoint  = resRanDomPoint.getJSONArray("ListPoint");
