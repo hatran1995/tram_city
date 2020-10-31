@@ -1,4 +1,4 @@
-package tramcity.server.test;
+package tramcity.test;
 
 import tramcity.server.common.City;
 import tramcity.server.connection.DataSource;
