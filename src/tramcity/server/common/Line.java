@@ -52,8 +52,8 @@ public class Line {
     		}else {
     			 do {
                 	JSONObject resItem = new JSONObject();                	
-                    resItem.put("ID", rs.getInt("lId"));
-                    resItem.put("Name",  rs.getString("lName") );
+//                    resItem.put("ID", rs.getInt("lId"));
+//                    resItem.put("Name",  rs.getString("lName") );
                     resItem.put("FromX", rs.getInt("lFromX") );
                     resItem.put("FromY", rs.getInt("lFromY") );
                     resItem.put("ToX", rs.getInt("lToX") );

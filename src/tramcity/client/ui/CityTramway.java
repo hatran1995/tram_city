@@ -41,6 +41,8 @@ public class CityTramway {
 	public JPanel panel_2 ;
 	private int cityID;
 	private JLabel lbtMess;
+	private JLabel lbtTramwayCountPlan;
+	private JLabel lbtTramwayCountRender;
 	public 	Client client ;
 	private JTextField txtRadius;
 	private JButton btnUpdate ;
@@ -150,7 +152,7 @@ public class CityTramway {
 		txtCostOne.setBounds(484, 21, 165, 20);
 		panel_cityinfo.add(txtCostOne);
 
-		btnUpdate = new JButton("Create");
+		btnUpdate = new JButton("Update");
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
@@ -161,7 +163,7 @@ public class CityTramway {
 				}
 			}
 		});
-		btnUpdate.setBounds(145, 77, 89, 23);
+		btnUpdate.setBounds(145, 108, 89, 23);
 		panel_cityinfo.add(btnUpdate);
 
 		JButton btnCancel = new JButton("Cancel");
@@ -172,23 +174,25 @@ public class CityTramway {
 				frame.dispose();
 			}
 		});
-		btnCancel.setBounds(247, 77, 89, 23);
+		btnCancel.setBounds(247, 108, 89, 23);
 		panel_cityinfo.add(btnCancel);
 
-		JButton btnRandomMap = new JButton("ReRandom");
-		btnRandomMap.setBounds(345, 77, 134, 23);
+		JButton btnRandomMap = new JButton("ReRender");
+		btnRandomMap.setBounds(345, 108, 134, 23);
 		panel_cityinfo.add(btnRandomMap);
 
 		lbtMess = new JLabel("");
-		lbtMess.setBounds(145, 111, 436, 14);
+		lbtMess.setBounds(145, 158, 436, 14);
 		panel_cityinfo.add(lbtMess);
 
 		txtRadius = new JTextField();
 		txtRadius.setColumns(10);
 		txtRadius.setBounds(145, 46, 165, 20);
+		txtRadius.setText("1000");
+		txtRadius.setVisible(false);
 		panel_cityinfo.add(txtRadius);
 
-		JLabel lblNewLabel = new JLabel("Puzzle City");
+		JLabel lblNewLabel = new JLabel("Tram City");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 16));
 		lblNewLabel.setBounds(214, 11, 197, 27);
@@ -198,6 +202,7 @@ public class CityTramway {
 		JLabel lblNewLabel_1_1_2 = new JLabel("Radius");
 		lblNewLabel_1_1_2.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblNewLabel_1_1_2.setBounds(10, 49, 113, 14);
+		lblNewLabel_1_1_2.setVisible(false);
 		panel_cityinfo.add(lblNewLabel_1_1_2);
 
 		panel_2 = new JPanel();
@@ -205,6 +210,26 @@ public class CityTramway {
 		//panel_2.setBackground(new Color(60, 179, 113));
 		panel_2.setBounds(47, 192, 610, 410);
 		panel_cityinfo.add(panel_2);
+		
+		JLabel lblNewLabel_1_1_3 = new JLabel("TramWay plan");
+		lblNewLabel_1_1_3.setHorizontalAlignment(SwingConstants.LEFT);
+		lblNewLabel_1_1_3.setBounds(145, 72, 113, 14);
+		panel_cityinfo.add(lblNewLabel_1_1_3);
+		
+		lbtTramwayCountPlan = new JLabel("");
+		lbtTramwayCountPlan.setHorizontalAlignment(SwingConstants.LEFT);
+		lbtTramwayCountPlan.setBounds(280, 72, 89, 14);
+		panel_cityinfo.add(lbtTramwayCountPlan);
+		
+		JLabel lblNewLabel_1_1_3_1 = new JLabel("Tramway Count Render");
+		lblNewLabel_1_1_3_1.setHorizontalAlignment(SwingConstants.LEFT);
+		lblNewLabel_1_1_3_1.setBounds(416, 72, 134, 14);
+		panel_cityinfo.add(lblNewLabel_1_1_3_1);
+		
+		lbtTramwayCountRender = new JLabel("");
+		lbtTramwayCountRender.setHorizontalAlignment(SwingConstants.LEFT);
+		lbtTramwayCountRender.setBounds(560, 72, 89, 14);
+		panel_cityinfo.add(lbtTramwayCountRender);
 		btnRandomMap.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -271,7 +296,10 @@ public class CityTramway {
 		try {
 			txtBudget.setText(String.valueOf( res.getInt("Value")));
 			txtCostOne.setText(String.valueOf( res.getInt("ValueStation")));
-			txtRadius.setText(String.valueOf( res.getInt("Radius")));
+			//txtRadius.setText(String.valueOf( res.getInt("Radius")/1000));
+			if(res.getInt("ValueStation") > 0)
+				lbtTramwayCountPlan.setText(""+(int) res.getInt("Value")/res.getInt("ValueStation")) ;
+			lbtTramwayCountRender.setText(""+jaListPoint.length());
 
 			widthCity = res.getInt("Width");
 			heightCity = res.getInt("Height");
@@ -311,7 +339,7 @@ public class CityTramway {
 	}	
 
 	private void updateTramway() throws InterruptedException {
-		if( true) {		//isValid() 	
+		if( isValid()) {		//isValid() 	
 			try {			
 				client.setResponseData(null);		
 				JSONObject bodyItem = new JSONObject();
@@ -319,7 +347,7 @@ public class CityTramway {
 				bodyItem.put("Value", "" +txtBudget.getText());
 				bodyItem.put("ValueStation",  txtCostOne.getText());
 			//bodyItem.put("NumberMaxStation", (int) (Double.parseDouble( txtBudget.getText())/ Double.parseDouble( txtCostOne.getText())));
-				bodyItem.put("Radius",  txtRadius.getText());
+				bodyItem.put("Radius", (Integer.parseInt( txtRadius.getText())*1000));
 
 				SendPackage sendPa = new SendPackage();
 				sendPa.setApi(ApiEnum.TRAMWAY_UPDATE);		
@@ -435,7 +463,7 @@ public class CityTramway {
 		try {	
 			iRadius = Integer.parseInt( txtRadius.getText());
 		} catch (Exception e) {
-			textErr = "Radius value is not valid, please enter the data in numeric integer format";
+			textErr = "Min distance between two point value is not valid, please enter the data in numeric integer format";
 			lbtMess.setText(textErr);
 			return false;
 
@@ -462,13 +490,18 @@ public class CityTramway {
 			return false;
 
 		}
-		if(!(iCostOne > 0 && (iBudget/iCostOne >= 2))) {
-			textErr = "You need at least 2 station to create a network";
+		if(!(iCostOne > 0 && (iBudget/iCostOne >= 5))) {
+			textErr = "You need at least 5 station to create a network";
+			lbtMess.setText(textErr);
+			return false;
+		}
+		if(iBudget/iCostOne > 200) {
+			textErr = "The maximum number of stations is 200";
 			lbtMess.setText(textErr);
 			return false;
 		}
 		if (!(iRadius > 0) ) {
-			textErr = "Radius is not valid";
+			textErr = "Min distance between two point is not valid";
 			lbtMess.setText(textErr);
 			return false;
 
@@ -483,11 +516,15 @@ public class CityTramway {
 			return false;
 
 		}
+//		if(iRadius< 1 || iRadius> Math.min(widthCity/1000, heightCity/1000)/10) {
+//
+//			textErr = "Range of distance between two point from 1km to "+ ((int) Math.min(widthCity/1000, heightCity/1000)/9)+" km";
+//			lbtMess.setText(textErr);
+//			return false;
+//		}
 
 
 		lbtMess.setText(textErr);
 		return valid;
 	}
-	
-	
 }

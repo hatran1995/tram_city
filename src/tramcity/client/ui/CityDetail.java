@@ -8,8 +8,9 @@ import java.awt.Color;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.Point;
 import javax.swing.SwingConstants;
-
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -29,6 +30,7 @@ public class CityDetail {
 	private JTextField txtWidth;
 	private int cityID;
 	private JLabel lbtMess;
+	public JPanel panel_2 ;
 
 	public 	Client client ;//= new Client("127.0.0.1", 4000);
 	/**
@@ -107,22 +109,22 @@ public class CityDetail {
 
 		txtHeight = new JTextField();
 		txtHeight.setColumns(10);
-		txtHeight.setBounds(119, 92, 232, 20);
+		txtHeight.setBounds(119, 35, 232, 20);
 		panel_cityinfo.add(txtHeight);
 
 		JLabel lblNewLabel_1_1_1_1 = new JLabel("Height");
 		lblNewLabel_1_1_1_1.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblNewLabel_1_1_1_1.setBounds(10, 95, 97, 14);
+		lblNewLabel_1_1_1_1.setBounds(10, 38, 97, 14);
 		panel_cityinfo.add(lblNewLabel_1_1_1_1);
 
 		JLabel lblNewLabel_1_1_1_1_1 = new JLabel("Width");
 		lblNewLabel_1_1_1_1_1.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblNewLabel_1_1_1_1_1.setBounds(10, 126, 97, 14);
+		lblNewLabel_1_1_1_1_1.setBounds(10, 69, 97, 14);
 		panel_cityinfo.add(lblNewLabel_1_1_1_1_1);
 
 		txtWidth = new JTextField();
 		txtWidth.setColumns(10);
-		txtWidth.setBounds(119, 123, 232, 20);
+		txtWidth.setBounds(119, 66, 232, 20);
 		panel_cityinfo.add(txtWidth);
 
 
@@ -137,7 +139,7 @@ public class CityDetail {
 				}
 			}
 		});
-		btnUpdate.setBounds(119, 182, 89, 23);
+		btnUpdate.setBounds(119, 98, 89, 23);
 		panel_cityinfo.add(btnUpdate);
 
 		JButton btnCancel = new JButton("Cancel");
@@ -148,11 +150,11 @@ public class CityDetail {
 				frame.dispose();
 			}
 		});
-		btnCancel.setBounds(221, 182, 89, 23);
+		btnCancel.setBounds(221, 98, 89, 23);
 		panel_cityinfo.add(btnCancel);
 
 		lbtMess = new JLabel("");
-		lbtMess.setBounds(64, 244, 315, 51);
+		lbtMess.setBounds(47, 123, 315, 25);
 		panel_cityinfo.add(lbtMess);
 
 		JButton btnNewButton = new JButton("Delete");
@@ -166,7 +168,7 @@ public class CityDetail {
 				}
 			}
 		});
-		btnNewButton.setBounds(322, 181, 97, 25);
+		btnNewButton.setBounds(322, 97, 97, 25);
 		panel_cityinfo.add(btnNewButton);
 
 		JLabel lblNewLabel = new JLabel("City Manager System");
@@ -174,6 +176,12 @@ public class CityDetail {
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 16));
 		lblNewLabel.setBounds(214, 11, 197, 27);
 		panel.add(lblNewLabel);
+		
+		panel_2 = new JPanel();
+		panel_2.setLayout(null);
+		//panel_2.setBackground(new Color(60, 179, 113));
+		panel_2.setBounds(46, 159, 610, 410);
+		panel_cityinfo.add(panel_2);
 	}
 
 
@@ -198,6 +206,7 @@ public class CityDetail {
 					if(res!= null) {
 						// if success true - get data bind to table 
 						setDataToField((res.getJSONObject("data")));
+						drawCity(Double.parseDouble(txtWidth.getText()), Double.parseDouble(txtHeight.getText()));
 					}
 					obj.wait(50);
 				} 		
@@ -213,8 +222,8 @@ public class CityDetail {
 		// TODO Auto-generated method stub
 		try {
 			txtCityName.setText(res.getString("name"));
-			txtHeight.setText(String.valueOf( res.getDouble("height")));
-			txtWidth.setText(String.valueOf( res.getDouble("width")));
+			txtHeight.setText(String.valueOf( res.getDouble("height")/1000));
+			txtWidth.setText(String.valueOf( res.getDouble("width")/1000));
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -269,8 +278,8 @@ public class CityDetail {
 				JSONObject bodyItem = new JSONObject();
 				bodyItem.put("ID", "" +cityID);
 				bodyItem.put("name", "" +txtCityName.getText());
-				bodyItem.put("height",  txtHeight.getText());
-				bodyItem.put("width", txtWidth.getText());
+				bodyItem.put("height", Integer.parseInt( txtHeight.getText())*1000);
+				bodyItem.put("width", Integer.parseInt( txtWidth.getText())*1000 );
 
 				SendPackage sendPa = new SendPackage();
 				sendPa.setApi(ApiEnum.CITY_UPDATE);		
@@ -288,6 +297,7 @@ public class CityDetail {
 							boolean sMess = res.getBoolean("success");
 							if(sMess) {
 								lbtMess.setText("Update Success");
+								drawCity(Double.parseDouble(txtWidth.getText()), Double.parseDouble(txtHeight.getText()));
 							}else {
 								lbtMess.setText("Error :"+res.getString("msg") );						
 							}
@@ -303,6 +313,26 @@ public class CityDetail {
 				e.printStackTrace();
 			}
 		}
+	}
+	private void drawCity(double widthCity,double heightCity) {
+		System.out.println(widthCity+"-"+heightCity);
+		double offset =Math.min((double) 600/widthCity, (double) 400/heightCity) ;
+		panel_2.removeAll();
+		panel_2.repaint();
+		panel_2.setVisible(true);
+		Point[] jaListPoint = null;
+		JSONArray jaListPath =  new JSONArray();
+		JPanel panel_map = new CityMap(jaListPoint,offset,jaListPath);
+		//panel_map.setLayout(null);
+		panel_map.setBackground(Color.BLACK);
+		//panel_map.setBounds(0, 0, (int) (width*offset), (int) (height*offset));
+		System.out.println(widthCity*offset + "-"+heightCity*offset );
+		//panel_map.setBounds(0, 0, 600, 400);
+		panel_map.setBounds(0, 0, (int) (widthCity*offset)+2, (int) (heightCity*offset)+2);
+		
+		//panel_map.setBackground(new Color(rgb));
+		panel_map.setVisible(true);
+		panel_2.add(panel_map);
 	}
 
 	private boolean isValid() {

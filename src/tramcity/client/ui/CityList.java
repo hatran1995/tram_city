@@ -205,8 +205,8 @@ public class CityList {
 				Object[] rowData = {
 					jb.getInt("ID"),
 					jb.getString("name"),
-					""+jb.getDouble("width"),
-					""+jb.getDouble("height")
+					""+jb.getDouble("width")/1000,
+					""+jb.getDouble("height")/1000
 				};
 	    		
 				model.addRow(rowData);

@@ -55,13 +55,13 @@ public class Station {
     		}else {
     			 do {
                 	JSONObject resItem = new JSONObject();                	
-                    resItem.put("ID", rs.getInt("sId"));
-                    resItem.put("Name",  rs.getString("sName") );
-                    resItem.put("IdCity", rs.getInt("sIdCity") );
+//                    resItem.put("ID", rs.getInt("sId"));
+//                    resItem.put("Name",  rs.getString("sName") );
+//                   resItem.put("IdCity", rs.getInt("sIdCity") );
                     resItem.put("Lat", rs.getInt("sLat") );
                     resItem.put("Long", rs.getInt("sLong") );
-                    resItem.put("IdLine", rs.getInt("sIdLine") );
-                    resItem.put("Position", rs.getInt("sPosition") );          
+//                    resItem.put("IdLine", rs.getInt("sIdLine") );
+//                    resItem.put("Position", rs.getInt("sPosition") );          
                     stationAll.put(resItem);                    
                 }	while(rs.next());
         		return stationAll;
@@ -99,7 +99,7 @@ public class Station {
 			System.out.println(query);
         	PreparedStatement pstmt = conn.prepareStatement(query);
             pstmt.executeUpdate();
-        	            
+			DataSource.returnConnection(conn);  
         	// add success
         	return new ApiResponse(true, null, "Add success");
 		} catch (Exception e) {
@@ -133,9 +133,10 @@ public class Station {
             	int ValueStation = rs.getInt("bValueStation") ;
             	int maxPoint = ((int) Budget/ValueStation);
             	int r = rs.getInt("bRadius") ;
+            	r = (int) ((Width + Height)/(2 * Math.sqrt(maxPoint)));
             	//render
-            	DividePoint newRandom = new DividePoint(Width, Height, maxPoint, r, 0, 2*Math.PI);
-            	JSONObject resRanDomPoint =	newRandom.getListPoint(); 
+            	DividePoint newRandom = new DividePoint();
+            	JSONObject resRanDomPoint =	DividePoint.getListPoint(Width, Height, maxPoint, r, 0, 2*Math.PI); 
             //	Point[] points = newRandom.getListPoint(); 
             	JSONArray resListPoint  = resRanDomPoint.getJSONArray("ListPoint");
 				Point[] lP = new Point[resListPoint.length()];
@@ -151,7 +152,9 @@ public class Station {
             	
             	//add path            	
             	JSONArray resListPath  = resRanDomPoint.getJSONArray("ListPath");
-            	Line.createAndUpdatePath(resListPath,cityID);
+            	if(resListPath.length() > 0) {                    
+            		Line.createAndUpdatePath(resListPath,cityID);
+            	}
                 //return list Station
             	return new ApiResponse(true, TramwayBudget.getTramWayByCityID(cityID), "Render station success");
 			}     	

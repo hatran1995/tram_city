@@ -158,8 +158,8 @@ public class CityAddNew {
 				JSONObject bodyItem = new JSONObject();
 				bodyItem.put("ID", "0");
 				bodyItem.put("name", "" +txtCityName.getText());
-				bodyItem.put("height", txtHeight.getText());
-				bodyItem.put("width", txtWidth.getText());
+				bodyItem.put("height", Integer.parseInt( txtHeight.getText())*1000);
+				bodyItem.put("width", Integer.parseInt( txtWidth.getText())*1000);
 
 
 				SendPackage sendPa = new SendPackage();
