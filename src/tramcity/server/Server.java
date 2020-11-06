@@ -1,12 +1,13 @@
 package tramcity.server;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.SQLException;
 
 import tramcity.server.connection.DataSource;
+
+
 
 @SuppressWarnings("unused")
 public class Server extends Thread {
@@ -40,11 +41,21 @@ public class Server extends Thread {
 			}
 		}
 	}
-	public static void main(String[] args) throws ClassNotFoundException, SQLException {
-		System.out.println("Hello from server"); 
-		DataSource dst = new DataSource();
-		new Server(1995);
+;
 		
-	}
+	
+	public static void main(String[] args) throws ClassNotFoundException, SQLException {
+			System.out.println("Hello from server"); 
+			int minConnection = 0;
+			int maxConnection = 5;//default
+			if(System.getProperty("maxConnection") != null && System.getProperty("maxConnection") != "")
+				{maxConnection = Integer.parseInt( System.getProperty("maxConnection"));
+				System.out.println("Start server with maxConnection="+maxConnection); }
+			else
+				System.out.println("Start default server!"); 
+			DataSource dst = new DataSource(minConnection, maxConnection);
+			new Server(1995);
+			
+		}
 
 }

@@ -7,8 +7,8 @@ public class JDBCConnectionPool {
 	public static int countConnectionsUsing = 0;
 	public ArrayList<Connection> ConnectionsReadyToUse = new ArrayList<Connection>();
 	private static String CONNECT_LINK = "jdbc:mysql://127.0.0.1:3306/puzzle_db?serverTimezone=UTC";
-	//	private static String CONNECT_LINK = "jdbc:mysql://172.31.249.177:3306/puzzle_01?serverTimezone=UTC";
-	private static int MAX_CONNEXION=1;
+//	private static String CONNECT_LINK = "jdbc:mysql://172.31.249.177:3306/puzzle_01?serverTimezone=UTC";
+	private static int MAX_CONNEXION=20;
 	private static int MIN_CONNEXION=0;
     public JDBCConnectionPool() {
 		// TODO Auto-generated constructor stub    	
@@ -41,7 +41,7 @@ public class JDBCConnectionPool {
 				
 				//break;
 				 try {
-					 System.out.println("Nombre excessif de connexions. Veuillez patientez.");
+					 System.out.println("Veuillez patientez. Nombre excessif de connexions.");
 		                wait();		                
 		            } catch (InterruptedException e) {
 		                e.printStackTrace();
@@ -60,36 +60,41 @@ public class JDBCConnectionPool {
     		System.out.println("Connection is Closed");
         	countConnectionsUsing = countConnectionsUsing>0?countConnectionsUsing-1:0;
     		initConnection();
-    		notifyAll();
         }else {
         	ConnectionsReadyToUse.add(c);
         	countConnectionsUsing = countConnectionsUsing>0?countConnectionsUsing-1:0;
         	System.out.println("Return Connection: ReadyToUse:"+ ConnectionsReadyToUse.size() + " - InUse:" + countConnectionsUsing);
+    		notifyAll();
         }
 	}      
-    public Connection initConnection() {
+    public void initConnection() {
     	try{
-    		//   		Connection conn = DriverManager.getConnection(CONNECT_LINK, "root", "toto");
-    		Connection conn = DriverManager.getConnection(CONNECT_LINK, "root", "");
-	    	if (conn != null) {
-	    		while (getSize()<MAX_CONNEXION) {
+    		if (getSize()<MAX_CONNEXION) {
+      //   		Connection conn = DriverManager.getConnection(CONNECT_LINK, "root", "toto");
+	    		Connection conn = DriverManager.getConnection(CONNECT_LINK, "root", "");
+		    	if (conn != null) {
+		    		
 		            System.out.println("Add new connection pool success!");
-		            ConnectionsReadyToUse.add(conn);
-	            }
-	    		if(countConnectionsUsing > 0)
-	    			notifyAll();
-	            return conn;
-	        } else {
-	            System.out.println("Failed to create new connection pool!");
-	            return null;
+		            ConnectionsReadyToUse.add(conn);		            
+		    		if(countConnectionsUsing > 0)
+		    			notifyAll();
+		          //  return conn;
+		        } 
+		    	else {
+		    		System.out.println("Failed to create new connection pool!");
+		    		//  return null;
+		        }
+    		}else {
+	            System.out.println("Limited connection!");
+	          //  return null;
 	        }
 	
 	    } catch (SQLException e) {
 	        System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
-            return null;
+           // return null;
 	    } catch (Exception e) {
 	        e.printStackTrace();
-            return null;
+           // return null;
 	    }
 	}
     public void closeAllConnection() throws SQLException {

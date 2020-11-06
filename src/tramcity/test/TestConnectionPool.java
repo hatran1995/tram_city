@@ -61,16 +61,18 @@ public class TestConnectionPool extends  Thread  {
 	   }
 	
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
-
+		System.out.println(System.getProperty("maxConnection"));
+		if(System.getProperty("maxConnection") != null && System.getProperty("maxConnection") != "")
+			maxConnection = Integer.parseInt( System.getProperty("maxConnection"));
 		System.out.println("minConnection:" +  minConnection + " - maxConnection:"+maxConnection);
 		DataSource dst = new DataSource(minConnection, maxConnection);
 		TestConnectionPool T1 = new TestConnectionPool( "Thread-a");
 	    T1.start();
 	    TestConnectionPool T2 = new TestConnectionPool( "Thread-b");
 		T2.start();
-	    TestConnectionPool T3 = new TestConnectionPool( "Thread-b");
+	    TestConnectionPool T3 = new TestConnectionPool( "Thread-c");
 		T3.start();
-	    TestConnectionPool T4 = new TestConnectionPool( "Thread-b");
+	    TestConnectionPool T4 = new TestConnectionPool( "Thread-d");
 		T4.start();
 	      
 	}
