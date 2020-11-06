@@ -13,6 +13,8 @@ import tramcity.server.common.ApiResponse;
 public class TestConnectionPool extends  Thread  {	
 	private Thread t;
 	private String threadName;
+	private static int minConnection =0;
+	private static int maxConnection =1;
 	
 	TestConnectionPool( String name){
 	       threadName = name;
@@ -59,11 +61,17 @@ public class TestConnectionPool extends  Thread  {
 	   }
 	
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
-		DataSource dst = new DataSource();
+
+		System.out.println("minConnection:" +  minConnection + " - maxConnection:"+maxConnection);
+		DataSource dst = new DataSource(minConnection, maxConnection);
 		TestConnectionPool T1 = new TestConnectionPool( "Thread-a");
 	    T1.start();
 	    TestConnectionPool T2 = new TestConnectionPool( "Thread-b");
 		T2.start();
+	    TestConnectionPool T3 = new TestConnectionPool( "Thread-b");
+		T3.start();
+	    TestConnectionPool T4 = new TestConnectionPool( "Thread-b");
+		T4.start();
 	      
 	}
 }

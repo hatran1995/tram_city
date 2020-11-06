@@ -10,7 +10,10 @@ public class DataSource {
 	public DataSource() throws SQLException, ClassNotFoundException{
 		this.connectionPool = new JDBCConnectionPool();
 	}
-	public static ResultSet executeQuery(String sql) throws SQLException {
+	public DataSource(int minConnection, int maxConnection) throws SQLException, ClassNotFoundException{
+		this.connectionPool = new JDBCConnectionPool(minConnection, maxConnection);
+	}
+	public static ResultSet executeQuery(String sql) throws SQLException, InterruptedException {
 		Connection conn = getConnection();
 		Statement st =  conn.createStatement();
 		ResultSet rs = st.executeQuery(sql);
@@ -18,7 +21,7 @@ public class DataSource {
 		return rs;
 	}
 
-	public static void executeUpdate(String sql) throws SQLException {
+	public static void executeUpdate(String sql) throws SQLException, InterruptedException {
 		
 		// TODO Auto-generated method stub
 		Connection conn = getConnection();
@@ -27,11 +30,11 @@ public class DataSource {
 		returnConnection(conn); 
 	}
 	
-	public static Connection getConnection() throws SQLException {
+	public static Connection getConnection() throws SQLException, InterruptedException {
 		return connectionPool.getConnection();
 	}
 
-	public static void returnConnection(Connection conn) throws SQLException {
+	public static void returnConnection(Connection conn) throws SQLException, InterruptedException {
 		connectionPool.returnConnection(conn);
 	}
 	public static void closeAllConnection() throws SQLException {
