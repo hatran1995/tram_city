@@ -3,6 +3,7 @@ package tramcity.server.common;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -233,5 +234,17 @@ public class TramwayBudget {
 			}
 		}
 	}
+
+	public static void deleteTramWayBudgetByCityID(int id)  {
+		String sql = "DELETE FROM tblbudgetstation where tblbudgetstation.bIdCity  = " + id;
+		try {
+			DataSource.executeUpdate(sql);
+		} catch (SQLException | InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
 	
 }

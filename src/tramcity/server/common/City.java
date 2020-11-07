@@ -149,25 +149,38 @@ public class City {
 	public static ApiResponse updateCity(JSONObject record) throws SQLException {
 			Connection conn ;
 			try {        	
-				conn = DataSource.getConnection();
 
-				PreparedStatement pstmt = conn.prepareStatement("UPDATE tblcity SET cName = ?, cHeight = ?,cWidth = ? WHERE cId = ?");
-				System.out.println(record);
-				int ID =  record.getInt("ID");
-
-				String Name =  record.getString("name");
-				Double Height = record.getDouble("height");
-				Double Width = record.getDouble("width");
-				//long date_of_birth = Date.valueOf(date).getTime();
-				pstmt.setString(1, Name);
-				pstmt.setDouble(2, Height);
-				pstmt.setDouble(3, Width);
-				pstmt.setInt(4, ID);
-
-				pstmt.executeUpdate();			
-				DataSource.returnConnection(conn);
-				// add success
-				return new ApiResponse(true, null, "Create success");
+				JSONObject checkCityValid = checkCityValid(record);
+				String txtResText = checkCityValid.getString("txtResText");
+				Boolean isValid = checkCityValid.getBoolean("isValid");
+				if(isValid) {					
+					conn = DataSource.getConnection();
+	
+					PreparedStatement pstmt = conn.prepareStatement("UPDATE tblcity SET cName = ?, cHeight = ?,cWidth = ? WHERE cId = ?");
+					System.out.println(record);
+					int ID =  record.getInt("ID");
+	
+					String Name =  record.getString("name");
+					Double Height = record.getDouble("height");
+					Double Width = record.getDouble("width");
+					//long date_of_birth = Date.valueOf(date).getTime();
+					pstmt.setString(1, Name);
+					pstmt.setDouble(2, Height);
+					pstmt.setDouble(3, Width);
+					pstmt.setInt(4, ID);
+	
+					pstmt.executeUpdate();			
+					DataSource.returnConnection(conn);
+					// add success
+					//remove budget & listPoint & listPath
+					TramwayBudget.deleteTramWayBudgetByCityID(ID);
+					Station.deleteStationByCityID(ID);
+					Line.deletePathByCity(ID);
+					
+					return new ApiResponse(true, null, "Update success");
+				}else {
+					return new ApiResponse(false, null, txtResText);
+				}
 			} catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();
@@ -241,12 +254,12 @@ public class City {
 			}
 		try {
 			//check max min width height
-			if(cWidth <10 || cWidth >50) {				
-				txtResText = "Width range from 10 to 50";
+			if(cWidth <10000 || cWidth >50000) {				
+				txtResText = "Width range from 10km to 50km";
 				isValid = false;
 			}
-			if(cHeight <10 || cHeight >50) {				
-				txtResText = "Height range from 10 to 50";
+			if(cHeight <10000 || cHeight >50000) {				
+				txtResText = "Height range from 10km to 50km";
 				isValid = false;
 			}
 

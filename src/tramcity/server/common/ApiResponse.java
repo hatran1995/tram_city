@@ -20,7 +20,7 @@ public class ApiResponse {
 		JSONObject item = new JSONObject();
 		item.put("success", success);
 		item.put("data", data);
-		item.put("msg", msg);
+		item.put("msg", msg=="null"?"System error": msg);
 		setBody(item);
 	}
 	
