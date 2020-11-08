@@ -1,0 +1,29 @@
+[
+  {
+    "testname":"Test Success Case",
+    "input": {
+      "cHeight": "40000",
+      "cWidth": "50000",
+      "maxPoint" : "20"
+    },
+    "output": 20
+  },
+  {
+    "testname":"Test Range Of Width (10km to 50km)",
+    "input": {
+      "cHeight": "40000",
+      "cWidth": "5",
+      "maxPoint": "20"
+    },
+    "output": 0
+  },
+  {
+    "testname":"Test Range Of Height (10km to 50km)",
+    "input": {
+      "cHeight": "5",
+      "cWidth": "40000",
+      "maxPoint": "20"
+    },
+    "output": 0
+  }
+]
