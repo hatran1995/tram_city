@@ -83,7 +83,21 @@ public class CityMap extends JPanel {
 				for (int i = 0; i < paths.length(); i++) {
 					try {
 						JSONObject path = paths.getJSONObject(i);
-						g2.setColor( Color.red );
+						int line = (int) path.getInt("Line");
+						switch (line) {
+						case 1:
+
+							g2.setColor( Color.yellow );
+							break;
+						case 2:
+
+							g2.setColor( Color.blue );
+							break;
+
+						default:
+							g2.setColor( Color.red );
+							break;
+						}
 						// X Start, Y Start, X End, Y End
 						g2.drawLine ( (int)(path.getInt("FromX")*os), (int) (path.getInt("FromY")*os), (int)(path.getInt("ToX")*os),(int) (path.getInt("ToY")*os ));
 					}

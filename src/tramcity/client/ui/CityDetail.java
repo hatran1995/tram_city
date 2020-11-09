@@ -222,8 +222,8 @@ public class CityDetail {
 		// TODO Auto-generated method stub
 		try {
 			txtCityName.setText(res.getString("name"));
-			txtHeight.setText(String.valueOf( res.getDouble("height")/1000));
-			txtWidth.setText(String.valueOf( res.getDouble("width")/1000));
+			txtHeight.setText(String.valueOf( res.getInt("height")/1000));
+			txtWidth.setText(String.valueOf( res.getInt("width")/1000));
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

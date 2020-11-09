@@ -46,6 +46,7 @@ public class CityTramway {
 	public 	Client client ;
 	private JTextField txtRadius;
 	private JButton btnUpdate ;
+	private JButton btnRandomMap ;
 	int minRadius = 0;
 	int maxRadius = 0;
 	int minStation = 5;
@@ -163,7 +164,7 @@ public class CityTramway {
 				}
 			}
 		});
-		btnUpdate.setBounds(145, 108, 89, 23);
+		btnUpdate.setBounds(145, 108, 158, 23);
 		panel_cityinfo.add(btnUpdate);
 
 		JButton btnCancel = new JButton("Cancel");
@@ -174,11 +175,11 @@ public class CityTramway {
 				frame.dispose();
 			}
 		});
-		btnCancel.setBounds(247, 108, 89, 23);
+		btnCancel.setBounds(315, 108, 89, 23);
 		panel_cityinfo.add(btnCancel);
 
-		JButton btnRandomMap = new JButton("ReRender");
-		btnRandomMap.setBounds(345, 108, 134, 23);
+		btnRandomMap = new JButton("ReRender");
+		btnRandomMap.setBounds(416, 108, 134, 23);
 		panel_cityinfo.add(btnRandomMap);
 
 		lbtMess = new JLabel("");
@@ -274,6 +275,9 @@ public class CityTramway {
 							JSONArray jaListPath =  res.getJSONObject("data").getJSONArray("paths");
 	
 							setDataToField((res.getJSONObject("data").getJSONArray("tramways")).getJSONObject(0),jaListPoint,jaListPath);
+						}else {
+							btnUpdate.setText("Save & Render Map");
+							btnRandomMap.setVisible(false);
 						}
 						System.out.println("return:"+res.toString());
 	
@@ -367,6 +371,7 @@ public class CityTramway {
 							if(bSuccess) {
 								lbtMess.setText("Render Map Success"); 
 								btnUpdate.setText("Update");
+								btnRandomMap.setVisible(true);
 								getTramway();
 							}else {
 								lbtMess.setText("Error :"+res.getString("msg") );	

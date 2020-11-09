@@ -134,7 +134,7 @@ public class Dashboard {
 		});
 		btnBackToList.setBounds(527, 11, 147, 23);
 		panel_dashboard.add(btnBackToList);
-		JLabel lblNewLabel = new JLabel("Puzzle City");
+		JLabel lblNewLabel = new JLabel("Tram City");
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 16));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setBounds(214, 11, 197, 27);
