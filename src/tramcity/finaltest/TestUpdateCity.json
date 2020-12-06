@@ -1,0 +1,12 @@
+[  {
+    "testname": "Test Success Case",
+    "input": {
+      "ValueStation": "500",
+      "Radius": "1000",
+      "Value": "5000",
+      "ID": "13",
+      "NumberMaxStation": 10
+    },
+    "output": true
+  }
+]

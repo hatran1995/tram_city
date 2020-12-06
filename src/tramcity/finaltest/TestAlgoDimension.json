@@ -1,0 +1,20 @@
+[
+  {
+    "testname":"Test Range Of Width (10km to 50km)",
+    "input": {
+      "cHeight": "20000",
+      "cWidth": "5",
+      "maxPoint": "20"
+    },
+    "output": 0
+  },
+  {
+    "testname":"Test Range Of Height (10km to 50km)",
+    "input": {
+      "cHeight": "5",
+      "cWidth": "20000",
+      "maxPoint": "20"
+    },
+    "output": 0
+  }
+]

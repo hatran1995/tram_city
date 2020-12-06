@@ -1,0 +1,13 @@
+[
+	{
+		"testname": "Test valid cost of a station",
+		"input": {
+			"ValueStation": "-500",
+			"Radius": "1000",
+			"Value": "5000",
+			"ID": "13",
+			"NumberMaxStation": 10
+		},
+		"output": false
+	}
+]

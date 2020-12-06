@@ -1,0 +1,11 @@
+[
+  {
+    "testname":"Test Success Case",
+    "input": {
+      "cHeight": "20000",
+      "cWidth": "20000",
+      "maxPoint" : "20"
+    },
+    "output": 20
+  } 
+ ]
